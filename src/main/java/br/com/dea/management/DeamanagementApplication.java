@@ -1,5 +1,8 @@
 package br.com.dea.management;
 
+import br.com.dea.management.student.domain.Student;
+import br.com.dea.management.student.repository.StudentRepository;
+import br.com.dea.management.student.service.StudentService;
 import br.com.dea.management.user.domain.User;
 import br.com.dea.management.user.repository.UserRepository;
 import br.com.dea.management.user.service.UserService;
@@ -27,6 +30,12 @@ public class DeamanagementApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -42,8 +51,13 @@ public class DeamanagementApplication implements CommandLineRunner {
             u.setName("name " + i);
             u.setLinkedin("linkedin " + i);
             u.setPassword("pwd " + i);
+            Student student = new Student();
+            student.setUniversity("UNI " + i);
+            student.setGraduation("grad " + i);
+            student.setFinishDate();
+            student.setUser(u);
+            this.studentRepository.save(student);
 
-            this.userRepository.save(u);
         }
 
         //Loading all Users
