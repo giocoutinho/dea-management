@@ -14,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,7 @@ public class DeamanagementApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //Deleting all Users
         this.userRepository.deleteAll();
+        this.studentRepository.deleteAll();
 
         //Creating some user
         for (int i = 0; i < 5; i++) {
@@ -54,7 +56,7 @@ public class DeamanagementApplication implements CommandLineRunner {
             Student student = new Student();
             student.setUniversity("UNI " + i);
             student.setGraduation("grad " + i);
-            student.setFinishDate();
+            student.setFinishDate(LocalDate.now());
             student.setUser(u);
             this.studentRepository.save(student);
 
