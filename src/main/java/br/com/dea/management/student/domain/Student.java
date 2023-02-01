@@ -1,13 +1,11 @@
 package br.com.dea.management.student.domain;
-import br.com.dea.management.user.domain.User;
 
+import br.com.dea.management.user.domain.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-
 @Entity
-@NamedQuery(name = "myQuery", query = "SELECT s FROM Student s where s.university = :university")
 public class Student {
 
     @Id
