@@ -49,11 +49,12 @@ public class DeamanagementApplication implements CommandLineRunner {
             u.setLinkedin("linkedin " + i);
             u.setPassword("pwd " + i);
 
-            Student student = new Student();
-            student.setUniversity("UNI " + (i+1));
-            student.setGraduation("Grad " + i);
-            student.setFinishDate(LocalDate.now());
-            student.setUser(u);
+            Student student = Student.builder()
+                    .university("UNI " + (i+1))
+                    .graduation("Grad " + i)
+                    .finishDate(LocalDate.now())
+                    .user(u)
+                    .build();
 
             this.studentRepository.save(student);
         }
