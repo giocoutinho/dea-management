@@ -2,10 +2,13 @@ package br.com.dea.management.student.controller;
 
 import br.com.dea.management.student.domain.Student;
 import br.com.dea.management.student.dto.StudentDto;
+import br.com.dea.management.student.dto.CreateStudentRequestDto;
+import br.com.dea.management.student.dto.UpdateStudentRequestDto;
 import br.com.dea.management.student.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,5 +86,53 @@ public class StudentController {
         return student;
 
     }
+
+    @Operation(summary = "Create a new Student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "500", description = "Error creating student"),
+    })
+    @PostMapping("/student")
+    public void createStudent(@Valid @RequestBody CreateStudentRequestDto createStudentRequestDto) {
+        log.info(String.format("Creating Student : Payload : %s", createStudentRequestDto));
+
+        Student student = studentService.createStudent(createStudentRequestDto);
+
+        log.info(String.format("Student created successfully : id : %s", student.getId()));
+    }
+
+    @Operation(summary = "Update a Student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "404", description = "Student not found"),
+            @ApiResponse(responseCode = "500", description = "Error updating student"),
+    })
+    @PutMapping("/student/{studentId}")
+    public void updateStudent(@PathVariable Long studentId, @Valid @RequestBody UpdateStudentRequestDto updateStudentRequestDto) {
+        log.info(String.format("Updating Student : Payload : %s", updateStudentRequestDto));
+
+        Student student = studentService.updateStudent(studentId, updateStudentRequestDto);
+
+        log.info(String.format("Student created successfully : id : %s", student.getId()));
+    }
+
+    @Operation(summary = "Delete a Student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "404", description = "Student not found"),
+            @ApiResponse(responseCode = "500", description = "Error deleting student"),
+    })
+    @DeleteMapping("/student/{studentId}")
+    public void deleteStudent(@PathVariable Long studentId) {
+        log.info(String.format("Removing Student : Id : %s", studentId));
+
+        studentService.deleteStudent(studentId);
+
+        log.info(String.format("Student removed successfully : id : %s", studentId));
+    }
+
 
 }

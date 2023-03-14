@@ -1,4 +1,4 @@
-package br.com.dea.management.student;
+package br.com.dea.management.student.get;
 
 import br.com.dea.management.student.domain.Student;
 import br.com.dea.management.student.repository.StudentRepository;
