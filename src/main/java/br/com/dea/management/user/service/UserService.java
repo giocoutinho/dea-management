@@ -35,11 +35,11 @@ public class UserService {
         //return user.orElseThrow(() -> new NotFoundException(User.class, email));
     }
 
-    public Page<Student> findAllUsersPaginated(Integer page, Integer pageSize) {
-        return this.userRepository.findAllPaginated(PageRequest.of(page, pageSize, Sort.by("user.name")));
+    public Page<User> findAllUsersPaginated(Integer page, Integer pageSize) {
+        return this.userRepository.findAllPaginated(PageRequest.of(page, pageSize, Sort.by("id")));
     }
 
-    public Student findStudentById(Long id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new NotFoundException(Student.class, id));
+    public User findUserById(Long id) {
+        return this.userRepository.findById(id).orElseThrow(() -> new NotFoundException(User.class, id));
     }
 }

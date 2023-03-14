@@ -2,6 +2,7 @@ package br.com.dea.management.user;
 
 import br.com.dea.management.user.domain.User;
 import br.com.dea.management.user.repository.UserRepository;
+import br.com.dea.management.student.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,9 @@ public class UserGetAllTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     @BeforeEach
     void beforeEach() {
         log.info("Before each test in " + UserGetAllTests.class.getSimpleName());
@@ -46,6 +50,7 @@ public class UserGetAllTests {
 
     @Test
     void whenRequestingUserList_thenReturnListOfUserPaginatedSuccessfully() throws Exception {
+        this.studentRepository.deleteAll();
         this.userRepository.deleteAll();
         this.createFakeUsers(100);
 
