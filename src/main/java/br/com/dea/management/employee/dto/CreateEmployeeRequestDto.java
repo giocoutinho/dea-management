@@ -27,8 +27,7 @@ public class CreateEmployeeRequestDto {
 
     private EmployeeType employeeType;
 
-    @JsonProperty("position")
-    private PositionDto positionDto;
+    private Long position;
 
     @NotNull(message = "Password could not be null")
     private String password;
