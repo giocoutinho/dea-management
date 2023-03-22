@@ -58,10 +58,9 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(Long employeeId, UpdateEmployeeRequestDto updateEmployeeRequestDto) {
+        Employee employee = this.findEmployeeById(employeeId);
         Position position = this.positionRepository.findById(updateEmployeeRequestDto.getPosition())
                 .orElseThrow(() -> new NotFoundException(Position.class, updateEmployeeRequestDto.getPosition()));
-
-        Employee employee = this.findEmployeeById(employeeId);
         User user = employee.getUser();
 
         user.setName(updateEmployeeRequestDto.getName());

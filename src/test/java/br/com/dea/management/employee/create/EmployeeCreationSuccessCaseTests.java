@@ -46,7 +46,7 @@ class EmployeeCreationSuccessCaseTests {
 
         String payload = "{" +
                 "\"name\": \"name\"," +
-                "\"email\": \"email\"," +
+                "\"email\": \"email@email.com\"," +
                 "\"linkedin\": \"linkedin\"," +
                 "\"employeeType\": \"DEVELOPER\"," +
                 "\"password\": \"password\"," +
@@ -59,7 +59,7 @@ class EmployeeCreationSuccessCaseTests {
         Employee employee = this.employeeRepository.findAll().get(0);
 
         assertThat(employee.getUser().getName()).isEqualTo("name");
-        assertThat(employee.getUser().getEmail()).isEqualTo("email");
+        assertThat(employee.getUser().getEmail()).isEqualTo("email@email.com");
         assertThat(employee.getUser().getLinkedin()).isEqualTo("linkedin");
         assertThat(employee.getUser().getPassword()).isEqualTo("password");
         assertThat(employee.getEmployeeType()).isEqualTo(EmployeeType.DEVELOPER);

@@ -65,7 +65,7 @@ class EmployeeUpdatePayloadValidationTests {
 
         String payload = "{" +
                 "\"name\": \"name\"," +
-                "\"email\": \"email\"," +
+                "\"email\": \"email@email.com\"," +
                 "\"linkedin\": \"linkedin\"," +
                 "\"employeeType\": \"DEVELOPER\"," +
                 "\"position\": 1, " +
@@ -88,10 +88,10 @@ class EmployeeUpdatePayloadValidationTests {
 
         String payload = "{" +
                 "\"name\": \"name\"," +
-                "\"email\": \"email\"," +
+                "\"email\": \"email@email.com\"," +
                 "\"linkedin\": \"linkedin\"," +
                 "\"employeeType\": \"DEVELOPER\"," +
-                "\"position\": 10, " +
+                "\"position\": 10," +
                 "\"password\": \"password\"" +
                 "}";
         mockMvc.perform(put("/employee/1")
