@@ -1,11 +1,9 @@
-package br.com.dea.management.employee.create;
+package br.com.dea.management.academyclass.create;
 
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
-import br.com.dea.management.employee.EmployeeType;
+import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
-import br.com.dea.management.position.domain.Position;
-import br.com.dea.management.position.repository.PositionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,76 +14,72 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class EmployeeCreationPayloadValidationTests {
+public class AcademyClassCreationPayloadValidationTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
+    private AcademyClassRepository academyClassRepository;
+    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private PositionRepository positionRepository;
-
-    @Autowired
-    private AcademyClassRepository academyClassRepository;
+    private EmployeeTestUtils employeeTestUtils;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
     @Test
     void whenPayloadRequiredFieldsAreMissing_thenReturn400AndTheErrors() throws Exception {
         String payload = "{}";
-        mockMvc.perform(post("/employee")
+        mockMvc.perform(post("/academy-class")
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
-                .andExpect(jsonPath("$.details", hasSize(3)))
-                .andExpect(jsonPath("$.details[*].field", hasItem("name")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Name could not be null")))
-                .andExpect(jsonPath("$.details[*].field", hasItem("email")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Email could not be null")))
-                .andExpect(jsonPath("$.details[*].field", hasItem("password")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Password could not be null")));
-
+                .andExpect(jsonPath("$.details", hasSize(4)))
+                .andExpect(jsonPath("$.details[*].field", hasItem("startDate")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Start date could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("endDate")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("End date could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("instructorId")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Instructor id could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("classType")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Class type id could not be null")));
     }
 
     @Test
-    void whenRequestingEmployeeCreationWithAValidPayloadButPositionDoesNotExists_thenReturn404Error() throws Exception {
+    void whenPayloadContainsInvalidInstructorId_thenReturn404AndTheError() throws Exception {
         this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
-        this.positionRepository.deleteAll();
 
         String payload = "{" +
-                "\"name\": \"name\"," +
-                "\"email\": \"email@email.com\"," +
-                "\"linkedin\": \"linkedin\"," +
-                "\"employeeType\": \"DEVELOPER\"," +
-                "\"password\": \"password\"," +
-                "\"position\": " + 1 +
+                "\"startDate\": \"2023-02-27\"," +
+                "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DESIGN\"," +
+                "\"instructorId\": " + 1 +
                 "}";
-        mockMvc.perform(post("/employee")
+
+        mockMvc.perform(post("/academy-class")
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.details", hasSize(1)));
-
     }
-
 }

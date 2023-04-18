@@ -3,6 +3,7 @@ package br.com.dea.management.academyclass.get;
 import br.com.dea.management.academyclass.AcademyTestUtils;
 import br.com.dea.management.academyclass.ClassType;
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
+import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.repository.PositionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,6 +42,9 @@ public class AcademyClassGetAllTests {
     private PositionRepository positionRepository;
 
     @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
     private AcademyTestUtils academyClassTestUtils;
 
     @BeforeEach
@@ -56,6 +60,7 @@ public class AcademyClassGetAllTests {
     @Test
     void whenRequestingAcademyClassList_thenReturnListOfAcademyClassPaginatedSuccessfully() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
 
         LocalDate startDate = LocalDate.of(2023, Month.JANUARY, 1);

@@ -1,5 +1,6 @@
 package br.com.dea.management.employee.get;
 
+import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
@@ -40,6 +41,9 @@ public class EmployeeGetByIdTests {
     @Autowired
     private PositionRepository positionRepository;
 
+    @Autowired
+    private AcademyClassRepository academyClassRepository;
+
     @BeforeEach
     void beforeEach() {
         log.info("Before each test in " + EmployeeGetByIdTests.class.getSimpleName());
@@ -52,6 +56,7 @@ public class EmployeeGetByIdTests {
 
     @Test
     void whenRequestingAnExistentEmployeeById_thenReturnTheEmployeeSuccessfully() throws Exception {
+        this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
 

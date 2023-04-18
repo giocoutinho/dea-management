@@ -1,5 +1,6 @@
 package br.com.dea.management.employee.get;
 
+import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.repository.PositionRepository;
@@ -37,6 +38,9 @@ public class EmployeeGetAllTests {
     private PositionRepository positionRepository;
 
     @Autowired
+    private AcademyClassRepository academyClassRepository;
+
+    @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     @BeforeEach
@@ -51,6 +55,7 @@ public class EmployeeGetAllTests {
 
     @Test
     void whenRequestingEmployeeList_thenReturnListOfEmployeePaginatedSuccessfully() throws Exception {
+        this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
 
@@ -62,22 +67,22 @@ public class EmployeeGetAllTests {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content", hasSize(4)))
                 .andExpect(jsonPath("$.content[0].name", is("name 0")))
-                .andExpect(jsonPath("$.content[0].email", is("email 0")))
+                .andExpect(jsonPath("$.content[0].email", is("email0@email.com")))
                 .andExpect(jsonPath("$.content[0].linkedin", is("linkedin 0")))
                 .andExpect(jsonPath("$.content[0].position.description", is("Dev")))
                 .andExpect(jsonPath("$.content[0].position.seniority", is("Senior")))
                 .andExpect(jsonPath("$.content[1].name", is("name 1")))
-                .andExpect(jsonPath("$.content[1].email", is("email 1")))
+                .andExpect(jsonPath("$.content[1].email", is("email1@email.com")))
                 .andExpect(jsonPath("$.content[1].linkedin", is("linkedin 1")))
                 .andExpect(jsonPath("$.content[1].position.description", is("Dev")))
                 .andExpect(jsonPath("$.content[1].position.seniority", is("Senior")))
                 .andExpect(jsonPath("$.content[2].name", is("name 10")))
-                .andExpect(jsonPath("$.content[2].email", is("email 10")))
+                .andExpect(jsonPath("$.content[2].email", is("email10@email.com")))
                 .andExpect(jsonPath("$.content[2].linkedin", is("linkedin 10")))
                 .andExpect(jsonPath("$.content[2].position.description", is("Dev")))
                 .andExpect(jsonPath("$.content[2].position.seniority", is("Senior")))
                 .andExpect(jsonPath("$.content[3].name", is("name 11")))
-                .andExpect(jsonPath("$.content[3].email", is("email 11")))
+                .andExpect(jsonPath("$.content[3].email", is("email11@email.com")))
                 .andExpect(jsonPath("$.content[3].linkedin", is("linkedin 11")))
                 .andExpect(jsonPath("$.content[3].position.description", is("Dev")))
                 .andExpect(jsonPath("$.content[3].position.seniority", is("Senior")));

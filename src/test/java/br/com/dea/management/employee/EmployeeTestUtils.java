@@ -31,7 +31,7 @@ public class EmployeeTestUtils {
 
         for (int i = 0; i < amount; i++) {
             User u = new User();
-            u.setEmail("email " + i);
+            u.setEmail("email" + i +"@email.com");
             u.setName("name " + i);
             u.setLinkedin("linkedin " + i);
             u.setPassword("password " + i);

@@ -1,5 +1,8 @@
-package br.com.dea.management.employee.create;
+package br.com.dea.management.academyclass.create;
 
+import br.com.dea.management.academyclass.AcademyTestUtils;
+import br.com.dea.management.academyclass.ClassType;
+import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.EmployeeType;
@@ -16,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,50 +29,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class EmployeeCreationSuccessCaseTests {
+public class AcademyClassCreationSuccessCaseTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
+    private AcademyClassRepository academyClassRepository;
+
+    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private AcademyClassRepository academyClassRepository;
-
+    private AcademyTestUtils academyTestUtils;
     @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
     @Test
     void whenRequestingEmployeeCreationWithAValidPayload_thenCreateAEmployeeSuccessfully() throws Exception {
         this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
-        Position position = this.employeeTestUtils.createFakePosition("Dev", "Pleno");
+
+        this.employeeTestUtils.createFakeEmployees(1);
+        Employee instructor = this.employeeRepository.findAll().get(0);
 
         String payload = "{" +
-                "\"name\": \"name\"," +
-                "\"email\": \"email@email.com\"," +
-                "\"linkedin\": \"linkedin\"," +
-                "\"employeeType\": \"DEVELOPER\"," +
-                "\"password\": \"password\"," +
-                "\"position\": " + position.getId() +
+                "\"startDate\": \"2023-02-27\"," +
+                "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DESIGN\"," +
+                "\"instructorId\": " + instructor.getId() +
                 "}";
-        mockMvc.perform(post("/employee")
+        mockMvc.perform(post("/academy-class")
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isOk());
 
-        Employee employee = this.employeeRepository.findAll().get(0);
+        AcademyClass academyClass = this.academyClassRepository.findAll().get(0);
 
-        assertThat(employee.getUser().getName()).isEqualTo("name");
-        assertThat(employee.getUser().getEmail()).isEqualTo("email@email.com");
-        assertThat(employee.getUser().getLinkedin()).isEqualTo("linkedin");
-        assertThat(employee.getUser().getPassword()).isEqualTo("password");
-        assertThat(employee.getEmployeeType()).isEqualTo(EmployeeType.DEVELOPER);
-        assertThat(employee.getPosition().getId()).isEqualTo(position.getId());
-
+        assertThat(academyClass.getStartDate()).isEqualTo("2023-02-27");
+        assertThat(academyClass.getEndDate()).isEqualTo("2024-02-27");
+        assertThat(academyClass.getClassType()).isEqualTo(ClassType.DESIGN);
+        assertThat(academyClass.getInstructor().getId()).isEqualTo(instructor.getId());
+        assertThat(academyClass.getInstructor().getClass()).isEqualTo(instructor.getClass());
+        assertThat(academyClass.getInstructor().getUser().getId()).isEqualTo(instructor.getUser().getId());
+        assertThat(academyClass.getInstructor().getPosition().getId()).isEqualTo(instructor.getPosition().getId());
     }
-
 }
