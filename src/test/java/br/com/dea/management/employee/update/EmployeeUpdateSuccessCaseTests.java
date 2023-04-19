@@ -6,6 +6,7 @@ import br.com.dea.management.employee.EmployeeType;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.domain.Position;
+import br.com.dea.management.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ class EmployeeUpdateSuccessCaseTests {
     private AcademyClassRepository academyClassRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -46,6 +50,7 @@ class EmployeeUpdateSuccessCaseTests {
     @Test
     void whenRequestingEmployeeUpdateWithAValidPayload_thenUpdateAEmployeeSuccessfully() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.employeeTestUtils.createFakeEmployees(1);
         Position position = this.employeeTestUtils.createFakePosition("Designer", "Junior");

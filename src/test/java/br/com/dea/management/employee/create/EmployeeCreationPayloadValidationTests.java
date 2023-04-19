@@ -6,6 +6,7 @@ import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.domain.Position;
 import br.com.dea.management.position.repository.PositionRepository;
+import br.com.dea.management.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ class EmployeeCreationPayloadValidationTests {
     private PositionRepository positionRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
     private AcademyClassRepository academyClassRepository;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -67,6 +71,7 @@ class EmployeeCreationPayloadValidationTests {
     @Test
     void whenRequestingEmployeeCreationWithAValidPayloadButPositionDoesNotExists_thenReturn404Error() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
 

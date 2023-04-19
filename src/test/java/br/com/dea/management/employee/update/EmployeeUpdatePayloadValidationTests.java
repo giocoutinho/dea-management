@@ -4,7 +4,10 @@ import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.repository.PositionRepository;
+import br.com.dea.management.project.repository.ProjectRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,14 +43,13 @@ class EmployeeUpdatePayloadValidationTests {
     private PositionRepository positionRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
     private AcademyClassRepository academyClassRepository;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-
-    EmployeeUpdatePayloadValidationTests(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
-    }
 
     @Test
     void whenPayloadHasRequiredFieldsMissing_thenReturn400AndTheErrors() throws Exception {
@@ -70,6 +72,7 @@ class EmployeeUpdatePayloadValidationTests {
     @Test
     void whenEditingAEmployeeThatDoesNotExists_thenReturn404() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
 
         String payload = "{" +
@@ -92,6 +95,7 @@ class EmployeeUpdatePayloadValidationTests {
     @Test
     void whenEditingAEmployeeWithAPositionThatDoesNotExistsDoesNotExists_thenReturn404() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
         this.employeeTestUtils.createFakeEmployees(1);
